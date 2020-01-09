@@ -1,0 +1,34 @@
+version: '2'
+services:
+
+  #redis容器
+  redis:
+    #定义主机名
+    hostname: myredis
+    #使用的镜像
+    image: redis:5.0.2
+    #容器的映射端口
+    ports:
+      - 6379:6379
+    restart: always
+    #定义挂载点
+    volumes:
+      - ./redis_data:/data
+      - ./redis_logs:/var/log/redis
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command:
+         - /bin/bash
+         - -c
+         - chown -R root /var/log/redis&&chgrp -R root /var/log/redis&&redis-server /usr/local/etc/redis/redis.conf
+    #环境变量
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+    networks:
+      - default
+
+
+networks:
+  default:
+    external:
+      name: spring

@@ -1,0 +1,32 @@
+version: '2.0'
+services:
+  ubtechinc-abi-micro-service:                                      # 服务名
+    build:                                                          # build相关信息
+     context: ./                                                   # build路径
+      #dockerfile: ubtechinc.dockerfile                              # dockerfile
+     args:
+      JARS_NAME: ubtechinc-abi-micro-service-1.0.0.jar         # jar名称
+      #JARS_NAME: ubtechinc-abi-micro-service-1.0.0.jar         # jar名称
+      RUNS_OPTS: -Xmx256M -Xms256M                                   #启动参数
+      RUNS_PROFILES: dev                                            # 指定profile启动
+    image: ubtechinc-abi-micro-service:1104                       # 镜像版本号
+    container_name: ubtechinc-abi-micro-service                                  # 容器名称
+    restart: always
+    volumes:
+      - ./logs/:/logs
+    ports:
+      - 8100:8080
+    external_links:
+      - mysql_prod
+      - java_redis_1
+      - zoo1
+      - zoo2
+      - zoo3
+    networks:
+      - default
+
+
+networks:
+  default:
+    external:
+      name: spring

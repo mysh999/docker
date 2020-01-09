@@ -1,0 +1,29 @@
+version: '3'                            #版本3语法
+services:
+  mysql-5.6:                            #定义服务名
+   build:
+      context: ./
+      dockerfile: ./Dockerfile_mysql
+   container_name: mysql_prod           #定义容器名称
+   hostname: mysql_prod
+   environment:                         #设置环境变量
+    MYSQL_ROOT_PASSWORD: 123456         #root初始密码
+    MYSQL_DATABASE: proddb              #新建库
+    MYSQL_ROOT_HOST: '%'                #允许来自运行容器的主机连接
+    TZ: Asia/Shanghai                   #设置时区
+   ports:                               #端口映射
+   - "3306:3306"
+   volumes:                             #卷映射
+   - ./mysql_data:/var/lib/mysql
+   - ./mysql_logs:/var/log/mysql
+   - ./mysql_init:/docker-entrypoint-initdb.d
+   - /usr/share/zoneinfo/Asia/Chongqing:/etc/localtime:ro
+   restart: always                      #当docker重启时容器自动启动
+   networks:
+     - default
+
+
+networks:
+  default:
+    external:
+      name: spring 
